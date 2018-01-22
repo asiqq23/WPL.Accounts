@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using WPL.Accounts.Middlewares;
+using WPL.Accounts.Services;
 
 namespace WPL.Accounts
 {
@@ -24,6 +20,7 @@ namespace WPL.Accounts
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddTransient<IOrderService, OrderService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -33,6 +30,8 @@ namespace WPL.Accounts
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseServerName();
 
             app.UseMvc();
         }
