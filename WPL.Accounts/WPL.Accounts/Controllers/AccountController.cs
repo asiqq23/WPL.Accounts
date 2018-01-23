@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WPL.Accounts.Services;
@@ -16,13 +17,21 @@ namespace WPL.Accounts.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(string address)
         {
-            return Ok(new
+            try
             {
-                AccountId = Guid.NewGuid(),
-                Orders = await _orderService.GeOrders()
-            });
+                return Ok(new
+                {
+                    AccountId = Guid.NewGuid(),
+                    Orders = await _orderService.GeOrders(address)
+                });
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, e);
+            }
+
         }
     }
 }
